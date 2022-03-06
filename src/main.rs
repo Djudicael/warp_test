@@ -1,4 +1,7 @@
+mod todo_rest;
 use warp::Filter;
+
+use crate::todo_rest::todos_filter;
 
 const WEB_FOLDER: &str = "web/";
 
@@ -6,7 +9,8 @@ const WEB_FOLDER: &str = "web/";
 async fn main() {
     // APIs
     let hi = warp::path("hi").and(warp::get()).map(|| "helo grom hi");
-    let apis = hi;
+    let todos = todos_filter();
+    let apis = hi.or(todos);
     // static contents
     let content = warp::fs::dir(WEB_FOLDER);
     let root = warp::get()
